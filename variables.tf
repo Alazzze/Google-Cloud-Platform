@@ -2,7 +2,7 @@
 variable "project_id" {
   description = "The ID of the Google Cloud project"
   type        = string
-  default     = "artful-bonito-436711-i7"
+  default     = "ID of the Google Cloud project"
 }
 
 variable "region" {
@@ -20,34 +20,34 @@ variable "zones" {
 variable "argocd_admin_password" {
   description = "Admin password for ArgoCD"
   type        = string
-  default     = "danceteam747"
+  default     = "Admin password for ArgoCD"
 }
 
 variable "wordpress_db_password" {
   description = "Password for WordPress database"
   type        = string
-  default     = "danceteam747"
+  default     = "Password for WordPress database"
 }
 
 variable "postgres_db_password" {
   description = "Password for PostgreSQL database"
   type        = string
-  default     = "danceteam747"
+  default     = "Password for PostgreSQL database"
 }
 
 #variable "service_account_email" {
 #  description = "The email of the service account to use"
 #  type        = string
-#  default     = "Alazze91@gmail.com"
+#  default     = "The email of the service account to use"
 #}
 
 variable "grafana_admin_password" {
   description = "Admin password for Grafana"
   type        = string
-  default     = "danceteam747"  
+  default     = "Admin password for Grafana"  
 }
 variable "cluster_name" {
-  description = "Назва GKE кластера"
+  description = "GKE ckuster name"
   type        = string
   default     = "gke-cluster"
 }
