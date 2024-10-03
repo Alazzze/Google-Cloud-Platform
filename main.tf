@@ -1,4 +1,4 @@
-# Конфігурація провайдерів
+# Provider
 terraform {
   required_providers {
     google = {
@@ -21,13 +21,13 @@ terraform {
   required_version = ">= 1.0.0"
 }
 
-# Налаштування провайдера Google
+# Google settings provider
 provider "google" {
   project = var.project_id
   region  = var.region
 }
 
-# Налаштування провайдера Kubernetes
+# Kubernetes settings provider
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
   token                  = data.google_client_config.default.access_token
@@ -57,7 +57,7 @@ resource "null_resource" "set_kube_timeout" {
 
 data "google_client_config" "default" {}
 
-# Увімкнення необхідних API
+#  API
 resource "google_project_service" "services" {
   for_each = toset([
     "cloudscheduler.googleapis.com",
@@ -72,7 +72,7 @@ resource "google_project_service" "services" {
 }
 
 
-# IAM конфігурація
+# IAM 
 resource "google_project_iam_member" "user_roles" {
   for_each = toset([
     "roles/file.editor",
@@ -147,7 +147,7 @@ resource "google_compute_firewall" "allow-external" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# GKE Кластер
+# GKE Cluster
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
   version                    = "33.0.4"
@@ -312,7 +312,7 @@ resource "google_cloud_scheduler_job" "postgres_backup" {
   depends_on = [google_project_service.services, google_service_account.scheduler_sa]
 }
 
-# Kubernetes ресурси
+# Kubernetes resourses
 resource "time_sleep" "wait_for_kubernetes" {
   depends_on = [module.gke]
   create_duration = "90s"
@@ -574,7 +574,7 @@ resource "helm_release" "grafana" {
   }
 }
 
-# Отримання даних про сервіси
+#  Getting data about services
 data "kubernetes_service" "grafana" {
   metadata {
     name      = "grafana"
