@@ -1,4 +1,4 @@
-# Provider
+# Конфігурація провайдерів
 terraform {
   required_providers {
     google = {
@@ -21,13 +21,13 @@ terraform {
   required_version = ">= 1.0.0"
 }
 
-# Google settings provider
+# Налаштування провайдера Google
 provider "google" {
   project = var.project_id
   region  = var.region
 }
 
-# Kubernetes settings provider
+# Налаштування провайдера Kubernetes
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
   token                  = data.google_client_config.default.access_token
@@ -57,7 +57,7 @@ resource "null_resource" "set_kube_timeout" {
 
 data "google_client_config" "default" {}
 
-#  API
+# Увімкнення необхідних API
 resource "google_project_service" "services" {
   for_each = toset([
     "cloudscheduler.googleapis.com",
@@ -72,7 +72,7 @@ resource "google_project_service" "services" {
 }
 
 
-# IAM 
+# IAM конфігурація
 resource "google_project_iam_member" "user_roles" {
   for_each = toset([
     "roles/file.editor",
@@ -147,7 +147,8 @@ resource "google_compute_firewall" "allow-external" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# GKE Cluster
+
+# GKE Кластер
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
   version                    = "33.0.4"
@@ -300,6 +301,7 @@ resource "google_cloud_scheduler_job" "postgres_backup" {
       service_account_email = google_service_account.scheduler_sa.email
     }
 
+
     body = base64encode(jsonencode({
       exportContext = {
         fileType  = "SQL"
@@ -312,7 +314,7 @@ resource "google_cloud_scheduler_job" "postgres_backup" {
   depends_on = [google_project_service.services, google_service_account.scheduler_sa]
 }
 
-# Kubernetes resourses
+# Kubernetes ресурси
 resource "time_sleep" "wait_for_kubernetes" {
   depends_on = [module.gke]
   create_duration = "90s"
@@ -491,6 +493,7 @@ resource "kubernetes_service" "phpmyadmin" {
   }
 }
 
+
 # ArgoCD
 resource "helm_release" "argocd" {
   name             = "argocd"
@@ -574,7 +577,7 @@ resource "helm_release" "grafana" {
   }
 }
 
-#  Getting data about services
+# Отримання даних про сервіси
 data "kubernetes_service" "grafana" {
   metadata {
     name      = "grafana"
